@@ -80,50 +80,54 @@ const TaskListPage = () => {
       });
   }
   useEffect(() => {
-    fetchTasksList();
-  }, []);
+    if (auth.token) {
+      fetchTasksList();
+    }
+  }, [auth]);
 
   return (
     <Stack gap={3}>
       {/* logged in */}
-      <Form
-        onSubmit={handleFormSubmit}
-        className="bg-light d-flex flex-column justify-content-center align-items-center border p-5 rounded"
-      >
-        <h2>New Task</h2>
-        <Form.Group className="mb-3 w-100">
-          <Form.Label>Title</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter title"
-            required
-            value={taskForm.title}
-            onChange={(event) => {
-              setTaskForm((prevObj) => {
-                return { ...prevObj, title: event.target.value };
-              });
-            }}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3 w-100">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={3}
-            placeholder="Enter description"
-            required
-            value={taskForm.description}
-            onChange={(event) => {
-              setTaskForm((prevObj) => {
-                return { ...prevObj, description: event.target.value };
-              });
-            }}
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit" className="w-100">
-          Submit
-        </Button>
-      </Form>
+      {auth.token && (
+        <Form
+          onSubmit={handleFormSubmit}
+          className="bg-light d-flex flex-column justify-content-center align-items-center border p-5 rounded"
+        >
+          <h2>New Task</h2>
+          <Form.Group className="mb-3 w-100">
+            <Form.Label>Title</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter title"
+              required
+              value={taskForm.title}
+              onChange={(event) => {
+                setTaskForm((prevObj) => {
+                  return { ...prevObj, title: event.target.value };
+                });
+              }}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3 w-100">
+            <Form.Label>Description</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              placeholder="Enter description"
+              required
+              value={taskForm.description}
+              onChange={(event) => {
+                setTaskForm((prevObj) => {
+                  return { ...prevObj, description: event.target.value };
+                });
+              }}
+            />
+          </Form.Group>
+          <Button variant="primary" type="submit" className="w-100">
+            Submit
+          </Button>
+        </Form>
+      )}
       <ListGroup>
         {tasks.map((task, index) => (
           <ListGroup.Item

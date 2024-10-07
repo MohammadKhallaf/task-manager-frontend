@@ -1,5 +1,5 @@
-import { Provider } from "react-redux";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Provider, useSelector } from "react-redux";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import store from "./store/redux";
 import Header from "./components/header";
@@ -15,22 +15,29 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 function App() {
+  const auth = useSelector((state) => state.auth);
+  //
   return (
     <BrowserRouter>
-      <Provider store={store}>
-        <Header />
-        <Container className="py-4">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="tasks" element={<TaskListPage />} />
-            <Route path="login" element={<LoginPage />} />
-            <Route path="register" element={<RegisterPage />} />
+      <Header />
+      <Container className="py-4">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          {auth.token && <Route path="tasks" element={<TaskListPage />} />}
+          {!auth.token && (
+            <>
+              <Route path="login" element={<LoginPage />} />
+              <Route path="register" element={<RegisterPage />} />
+            </>
+          )}
 
-            <Route path="*" element={<div>Not found | 404</div>} />
-          </Routes>
-        </Container>
-        <ToastContainer />
-      </Provider>
+          <Route
+            path="*"
+            element={<Navigate to={auth.token ? "tasks" : "login"} />}
+          />
+        </Routes>
+      </Container>
+      <ToastContainer />
     </BrowserRouter>
   );
 }
