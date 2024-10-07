@@ -7,11 +7,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 
 import "./App.css";
+import Header from "./components/header";
 
 function App() {
   return (
     <BrowserRouter>
       <Provider store={store}>
+        <Header />
         <Routes>
           <Route path="/" element={<div>Home</div>} />
           <Route path="tasks" element={<div>Tasks</div>} />
